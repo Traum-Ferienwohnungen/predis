@@ -84,11 +84,6 @@ class SentinelReplication extends MasterSlaveReplication
         ReplicationStrategy $strategy = null,
         $database = 0
     ) {
-        var_dump($sentinels);
-        var_dump($service);
-        var_dump($connectionFactory);
-        var_dump($strategy);
-
         $this->sentinels = $sentinels;
         $this->service = $service;
         $this->connectionFactory = $connectionFactory;
