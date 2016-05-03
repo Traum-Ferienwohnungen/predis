@@ -44,6 +44,11 @@ class SentinelReplication extends MasterSlaveReplication
     protected $connectionFactory;
 
     /**
+     * @var int
+     */
+    protected $database;
+
+    /**
      * The current sentinel connection instance.
      *
      * @var NodeConnectionInterface
@@ -70,16 +75,24 @@ class SentinelReplication extends MasterSlaveReplication
      * @param string                     $service           Name of the service for autodiscovery.
      * @param ConnectionFactoryInterface $connectionFactory Connection factory instance.
      * @param ReplicationStrategy        $strategy          Replication strategy instance.
+     * @param int                        $database          The Database to use for these clients.
      */
     public function __construct(
         array $sentinels,
         $service,
         ConnectionFactoryInterface $connectionFactory,
-        ReplicationStrategy $strategy = null
+        ReplicationStrategy $strategy = null,
+        $database = 0
     ) {
+        var_dump($sentinels);
+        var_dump($service);
+        var_dump($connectionFactory);
+        var_dump($strategy);
+
         $this->sentinels = $sentinels;
         $this->service = $service;
         $this->connectionFactory = $connectionFactory;
+        $this->database = $database;
 
         parent::__construct($strategy);
     }
@@ -207,6 +220,7 @@ class SentinelReplication extends MasterSlaveReplication
             'host' => $payload[0],
             'port' => $payload[1],
             'alias' => 'master',
+            'database' => $this->database,
         );
     }
 
@@ -240,6 +254,7 @@ class SentinelReplication extends MasterSlaveReplication
             $slaves[] = array(
                 'host' => $slave[3],
                 'port' => $slave[5],
+                'database' => $this->database
             );
         }
 
